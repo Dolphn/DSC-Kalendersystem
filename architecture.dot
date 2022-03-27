@@ -5,14 +5,11 @@ digraph G {
   backend -> frontend
   datenbank -> backend
   
-  
-  dbfn -> to_db[arrowhead=none]
   backend -> datenbank 
-  to_db -> datenbank
   
  
   #calendar -> datenbank
-  calendar -> backend [label="[{start: Timestamp, end: Timestamp}]"]
+  calendar -> backend [label=""]
   backend -> calendar
   calendar -> user_calendar
   user_calendar -> calendar
@@ -20,16 +17,9 @@ digraph G {
   db -> datenbank
   datenbank -> db
  
-  dbfn [label="\
-  newEvent(name: String, description: String, start: Timestamp, end: Timestamp, duration: Duration, dayStart: Duration, dayEnd: Duration, weekdays: Weekdays) -> Event\n\
-  newParticipant(event: Event, name: String) -> Participant\n\
-  newBlockedDate(event: Event, participant: Participant, start: Timestamp, end: Timestamp)\n\
-  newBlockedDates(event: Event, participant: Participant, blockedDates: [{start: Timestamp, end: Timestamp}])",
-  shape=block]
   db [label="MariaDB"]
-  datenbank [label="Datenbank API"]
+  datenbank [label="Database API"]
   user [shape=Mdiamond];
-  calendar [label="Kalender API"];
-  user_calendar [label="Kalender des Nutzers"]
-  to_db [shape="point"]
+  calendar [label="Calender API"];
+  user_calendar [label="Users Calendar"]
 }

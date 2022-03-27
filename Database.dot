@@ -1,0 +1,32 @@
+digraph G {
+    event[label="\
+Table Event:\l id: Int (Primary Key)\l name: Text\l description: Text\l\
+start: Timestamp\l end: Timestamp\l duration: Int\l dayStart: Int\l dayEnd: Int\l\
+weekday: Enum('Mo', 'Tue', 'We', 'Thu', 'Fr', 'Sa', 'Su')\l",
+shape=square]; 
+    participant[label="\
+Table Participant:\l\
+id: Int (Primary Key)\l\
+name: Text\l\
+event: Event\l\
+", shape=square]
+
+    participant -> event [label="Participant.event (n:1)"];
+
+    blockedDates[label="\
+Table BlockedDate: \l\
+id: Int (Primary Key)\l\
+start: Timestamp\l\
+end: Timestamp\l\
+participant: Participant"
+shape=square]
+
+    blockedDates -> participant [label="BlockedDates.participant (n:1)"]
+
+    dbfn [label="\
+    newEvent(name: String, description: String, start: Timestamp, end: Timestamp, duration: Duration, dayStart: Duration, dayEnd: Duration, weekdays: Weekdays) -> Event\n\
+    newParticipant(event: Event, name: String) -> Participant\n\
+    newBlockedDate(event: Event, participant: Participant, start: Timestamp, end: Timestamp)\n\
+    newBlockedDates(event: Event, participant: Participant, blockedDates: [{start: Timestamp, end: Timestamp}])",
+    shape=block]
+}

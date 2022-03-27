@@ -1,0 +1,50 @@
+digraph G {
+    user -> frontend
+    frontend -> user
+    frontend -> backend
+    backend -> frontend
+ 
+    # cal <-> backend
+    calendar_strategy [label="interface CalendarStrategy: \n\
+    getBlockedDates(start: Timestamp, end: Timestamp) -> [{start: Timestamp, end: Timestamp}] \n\
+    ", shape=square]
+    calendar_strategy_factory [label="type CalendarStrategyFactory: \n\
+      setStrategy(strategy: StrategyName) \n\
+      setOptions(options: Object) \n\
+      buildStrategy() -> CalendarStrategy \n\
+    ", shape=square]
+    
+    ## cal -> backend
+    calendar -> backend [label="[{start: Timestamp, end: Timestamp}]"]
+    #backend -> calendar [label="getBlockedDates(strategy: CalendarStrategy, start: Timestamp, end: Timestamp) -> [{start: Timestamp, end: Timestamp}]"]
+    
+    ## backend -> cal
+    backend_to_cal [label="Calendar API: Interface:getBlockedDates(\l  strategy: CalendarStrategy,\l  start: Timestamp,\l  end: Timestamp\l) -> [{start: Timestamp, end: Timestamp}]", 
+    shape="square"];
+    backend -> backend_to_cal [arrowhead="none"]
+    backend_to_cal -> calendar
+    
+    backend_to_cal -> calendar_strategy
+    calendar_strategy -> calendar_strategy_factory
+    
+    # backend <-> Datenbank
+    dbfn [label="\
+    newEvent(name: String, description: String, start: Timestamp, end: Timestamp, duration: Duration, dayStart: Duration, dayEnd: Duration, weekdays: Weekdays) -> Event\n\
+    newParticipant(event: Event, name: String) -> Participant\n\
+    newBlockedDate(event: Event, participant: Participant, start: Timestamp, end: Timestamp)\n\
+    newBlockedDates(event: Event, participant: Participant, blockedDates: [{start: Timestamp, end: Timestamp}])",
+    shape=block]
+    user [shape=Mdiamond];
+    backend -> dbfn [arrowhead="none"]
+    dbfn -> datenbank
+    
+    # calendar
+    calendar [label="Calender API"];
+    user_calendar [label="Users Calendar"]
+    
+    calendar -> user_calendar
+    user_calendar -> calendar
+  
+    db [label="MariaDB"]
+    datenbank [label="Datenbank API"]
+}
