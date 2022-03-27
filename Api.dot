@@ -1,7 +1,6 @@
 digraph G {
     user -> frontend
     frontend -> user
-    frontend -> backend
     backend -> frontend
  
     # cal <-> backend
@@ -19,7 +18,7 @@ digraph G {
     #backend -> calendar [label="getBlockedDates(strategy: CalendarStrategy, start: Timestamp, end: Timestamp) -> [{start: Timestamp, end: Timestamp}]"]
     
     ## backend -> cal
-    backend_to_cal [label="Calendar API: Interface:getBlockedDates(\l  strategy: CalendarStrategy,\l  start: Timestamp,\l  end: Timestamp\l) -> [{start: Timestamp, end: Timestamp}]", 
+    backend_to_cal [label="Calendar API: Interface:\lgetBlockedDates(\l  strategy: CalendarStrategy,\l  start: Timestamp,\l  end: Timestamp\l) -> [{start: Timestamp, end: Timestamp}]", 
     shape="square"];
     backend -> backend_to_cal [arrowhead="none"]
     backend_to_cal -> calendar
@@ -38,6 +37,22 @@ digraph G {
     backend -> dbfn [arrowhead="none"]
     dbfn -> datenbank
     
+    # frontend <-> backend
+    frontend -> frontend_to_backend [arrowhead=none]
+    frontend_to_backend -> backend
+    
+    frontend_to_backend [label="\l\
+        User Authentication through cookies \l\
+        POST /events -> id: ID (create an Event and receive id) \l\
+        GET /events/<id> (Get an event by id) \l\
+        POST /events/<id>/participants/ : {name: String} -> UserId (Add a user to an event) \l\
+        GET /events/<id>/participants/ -> {user_id: UserId, name: String, blockedDates: [start: Timestamp, end: Timestamp]} \
+(Get all user of event) \l\
+        POST /events/<id>/participants/<user_id>/blocked_dates : {start: Timestamp, end: Timestamp} \l\
+        GET /events/<id>/participants/<user_id>/blocked_dates -> [{start: Timestamp, end: Timestamp}] \l\
+        POST /events/<id>/participants/<user_id>/blocked_dates/caldav : {link: String, password: String} \l\
+    "shape=square]
+    
     # calendar
     calendar [label="Calender API"];
     user_calendar [label="Users Calendar"]
@@ -47,4 +62,6 @@ digraph G {
   
     db [label="MariaDB"]
     datenbank [label="Datenbank API"]
+    
+    datenbank -> db
 }
