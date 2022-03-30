@@ -43,10 +43,10 @@ digraph G {
     
     frontend_to_backend [label="\l\
         User Authentication through cookies \l\
-        POST /events -> id: ID (create an Event and receive id) \l\
-        GET /events/<id> (Get an event by id) \l\
+        POST /events -> ID (create an Event and receive id) \l\
+        GET /events/<id> -> Event (Get an event by id) \l\
         POST /events/<id>/participants/ : {name: String} -> UserId (Add a user to an event) \l\
-        GET /events/<id>/participants/ -> {user_id: UserId, name: String, blockedDates: [start: Timestamp, end: Timestamp]} \
+        GET /events/<id>/participants/ -> [{user_id: UserId, name: String, blockedDates: [{start: Timestamp, end: Timestamp}]}] \
 (Get all user of event) \l\
         POST /events/<id>/participants/<user_id>/blocked_dates : {start: Timestamp, end: Timestamp} \l\
         GET /events/<id>/participants/<user_id>/blocked_dates -> [{start: Timestamp, end: Timestamp}] \l\
